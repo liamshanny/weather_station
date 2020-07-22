@@ -18,5 +18,5 @@ testWeatherData = {
 data = umsgpack.packb(testWeatherData)
 headers = {"content-type": "application/x-msgpack"}
 cert = ('certs/user.crt', 'certs/user_unencrypted.key')
-r = requests.post('https://weather.shanny.tools/api/v1/full-send', data=data, headers=headers, cert=cert)
+r = requests.post('https://108.7.77.7/api/v1/full-send', data=data, headers=headers, cert=cert, verify=False)
 print(r.reason)

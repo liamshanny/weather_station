@@ -1,3 +1,4 @@
 backend/certs/*
 *.pyc
 *.sync-conflict-*
+certs

@@ -60,3 +60,4 @@ def full_send(message: WeatherData):
             %(lightIntensity)s, %(lightR)s, %(lightG)s, %(lightB)s, %(rainFall)s, %(windSpeed)s, %(windDirection)s, 
             %(lastIp)s)''', entry)
         db.wait(conn)
+    return {"status": "OK"}
