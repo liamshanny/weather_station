@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
 from typing import List
-from backend.utils.db_connector import db
+from utils.db_connector import db
 from datetime import datetime
 
 router = APIRouter()

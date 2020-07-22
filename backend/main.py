@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from msgpack_asgi import MessagePackMiddleware
 
-from backend.endpoints.v1 import weather_consumer, base
+from endpoints.v1 import weather_consumer, base
 
 app = FastAPI()
 app.add_middleware(MessagePackMiddleware)
