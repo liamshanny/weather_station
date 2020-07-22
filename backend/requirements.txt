@@ -1,0 +1,5 @@
+requests==2.24.0
+fastapi[all]==0.60.0
+msgpack-asgi==1.0.0
+u-msgpack-python==2.6.0
+psycopg2-binary==2.8.5
