@@ -19,9 +19,10 @@ class sensorPackage:
         self.i2c = busio.I2C(board.SCL, board.SDA)
         self.lps35hw = adafruit_lps35hw.LPS35HW(self.i2c)
         self.si7021 = si(smb(self.bus))
+        #maybe add delay here?
         #self.lightningSensor = as3935.AS3935(asIntPin, self.bus, self.as3935Addr) #this uses a pigpio socket
         self.pi = pigpio.pi() #for general gpio, may not end up needing this
-        self.cam = multiCam(enabledCams, self.pi,[1]) #init camera board with a=fisheye, c = ir (this could go in main?)
+        #self.cam = multiCam(enabledCams, self.pi,[1]) #init camera board with a=fisheye, c = ir (this could go in main?)
 
 
 
@@ -29,8 +30,9 @@ class sensorPackage:
     def lpsPressure(self):
         try:
             return self.lps35hw.pressure
-        except:
+        except Exception as e:
             print("error reading lps pressure")
+            print(e)
             return -1
 
     @property

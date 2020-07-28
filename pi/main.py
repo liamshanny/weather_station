@@ -15,9 +15,10 @@ def main():
     sensorQueue = SimpleQueue()
     while(1):
         data = dataLogging.logData(sensorQueue, sensors)
-        sensors.cam.captureAll()
+        #output = data['data']
+        #sensors.cam.captureAll()
         headers = {"content-type": "application/x-msgpack"}
-        cert = ('certs/user.crt', 'certs/user_unencrypted.key')
+        cert = ('../backend/certs/user.crt', '../backend/certs/user_unencrypted.key')
         #data = sensorQueue.get()
         #print(data)
         r = requests.post('https://108.7.77.7/api/v1/full-send', data=data, headers=headers, cert=cert, verify=False)

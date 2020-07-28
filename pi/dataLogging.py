@@ -11,7 +11,9 @@ def logData(queue, sensors):
     data = {}
     data["timeStamp"] = int(datetime.datetime.now().timestamp()) #seconds since the epoch rounded down
     data["lpsTemp"] = sensors.lpsTemperature
+    time.sleep(.1)
     data["lpsPressure"] = sensors.lpsPressure
+    time.sleep(.1)
     siHum, siTemp = sensors.siData
     data["siTemp"] = siTemp
     data["relativeHumidity"] = siHum
@@ -20,7 +22,7 @@ def logData(queue, sensors):
     data["windData"] = {"speed":2.2, "direction":"nw"}
     data["lastIp"] = getIp()
     command = {"command":"sendStandardData", "data":data}
-    print(command)
+    print(data)
     command = umsgpack.packb(command)
     commandQueue.put(command)
     return command
