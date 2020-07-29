@@ -22,7 +22,7 @@ def logData(queue, sensors):
     data["windData"] = {"speed":2.2, "direction":"nw"}
     data["lastIp"] = getIp()
     command = {"command":"sendStandardData", "data":data}
-    print(data)
+    #print(data)
     command = umsgpack.packb(command)
     commandQueue.put(command)
     return command

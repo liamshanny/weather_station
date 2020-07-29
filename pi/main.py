@@ -1,12 +1,15 @@
 import time
+import urllib3
 import requests
 import subprocess
 import dataLogging
 import pigpio
 from queue import SimpleQueue
 from sensorCollection import sensorPackage
-sampleInterval = 5 #seconds between samples
+sampleInterval = 10 #seconds between samples
 sampleCount = 0
+
+urllib3.disable_warnings()
 
 def main():
     #check for 4g connection
@@ -21,6 +24,7 @@ def main():
         cert = ('../backend/certs/user.crt', '../backend/certs/user_unencrypted.key')
         #data = sensorQueue.get()
         #print(data)
-        r = requests.post('https://108.7.77.7/api/v1/full-send', data=data, headers=headers, cert=cert, verify=False)
-        print(r.reason)
+        r = requests.post('https://weather.shanny.tools/api/v1/full-send', data=data, headers=headers, cert=cert, verify=False)
+        #print(r.reason)
         time.sleep(sampleInterval)
+main()

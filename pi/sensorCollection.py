@@ -22,7 +22,7 @@ class sensorPackage:
         #maybe add delay here?
         #self.lightningSensor = as3935.AS3935(asIntPin, self.bus, self.as3935Addr) #this uses a pigpio socket
         self.pi = pigpio.pi() #for general gpio, may not end up needing this
-        #self.cam = multiCam(enabledCams, self.pi,[1]) #init camera board with a=fisheye, c = ir (this could go in main?)
+        self.cam = multiCam(enabledCams, self.pi,[1]) #init camera board with a=fisheye, c = ir (this could go in main?)
 
 
 

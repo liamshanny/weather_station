@@ -1,12 +1,15 @@
 from picamera import PiCamera
+import busio
+from board import *
+from adafruit_bus_device.i2c_device import I2CDevice
 import pigpio
 import datetime
-
+from smbus import SMBus as smb
 class multiCam():
 
     camSelectionPins = {"a": [0,0,1], "b":[1,0,1], "c": [0,1,0], "d":[1,1,0]}
     camAddr = {"a": 4, "b":5, "c": 6, "d":7}
-
+    i2cAddr = 0x70
 
 
     def __init__(self, enabledCameras, pi, cameraParams):
@@ -30,25 +33,25 @@ class multiCam():
         self.pi.write(9, 1)
         self.pi.write(25, 1)
 
+        self.i2c = smb(1) #use SMB for i2c, pigpio didn't play nicely with the shitshow of libs
+
 
     def captureAll(self):
-        i2c = self.pi.i2c_open(1, 0x70)
+
         for camera in self.enabled:
             try:
-                self.pi.i2c_write_device(i2c, [0, self.camAddr[camera]])
-            except pigpio.error:
-                print("error with i2c write, trying again")
-                self.pi.i2c_write_device(i2c, [0, self.camAddr[camera]])
+                self.i2c.write_byte_data(self.i2cAddr, 0, self.camAddr[camera])
+            except OSError:
+                self.i2c.write_byte_data(self.i2cAddr, 0, self.camAddr[camera])
             self.pi.write(4, self.camSelectionPins[camera][0])
             self.pi.write(17, self.camSelectionPins[camera][1])
             self.pi.write(18, self.camSelectionPins[camera][2])
             timestamp = datetime.datetime.now().time() #get time for timestamp
-            captureString = "/home/pi/weatherStation/photos/camera_"+camera+"/"+str(timestamp.hour)+":"+str(timestamp.minute)+":"+str(timestamp.second)+".jpg"
+            captureString = "/home/pi/weatherStation/photos/camera_"+camera+"/"+str(timestamp.hour)+":"+str(timestamp.minute)+":"+str(timestamp.second)+"_"+camera+".jpg"
             try:
                 self.cam.capture(captureString, quality=100)  # minimize any compression
             except picamera.exc.PiCameraRuntimeError:
                 self.cam.capture(captureString, quality=100)  #this error usually happens on the first attempt to capture, always works on second try and never recurs
-        self.pi.i2c_close(i2c)
         return captureString #idk this may be unnecessary
 
     def capture(self, camSelection):
