@@ -5,6 +5,8 @@ from adafruit_bus_device.i2c_device import I2CDevice
 import pigpio
 import datetime
 from smbus import SMBus as smb
+import os
+
 class multiCam():
 
     camSelectionPins = {"a": [0,0,1], "b":[1,0,1], "c": [0,1,0], "d":[1,1,0]}
@@ -33,16 +35,19 @@ class multiCam():
         self.pi.write(9, 1)
         self.pi.write(25, 1)
 
-        self.i2c = smb(1) #use SMB for i2c, pigpio didn't play nicely with the shitshow of libs
+        #self.i2c = smb(1) #use SMB for i2c, pigpio didn't play nicely with the shitshow of libs
 
 
     def captureAll(self):
 
         for camera in self.enabled:
             try:
-                self.i2c.write_byte_data(self.i2cAddr, 0, self.camAddr[camera])
+                i2c = "i2cset -y 1 0x70 0x00 0x0" +str(self.camAddr[camera])
+                os.system(i2c)
+                #self.i2c.write_byte_data(self.i2cAddr, 0, self.camAddr[camera])
             except OSError:
-                self.i2c.write_byte_data(self.i2cAddr, 0, self.camAddr[camera])
+                print("error")
+                #self.i2c.write_byte_data(self.i2cAddr, 0, self.camAddr[camera])
             self.pi.write(4, self.camSelectionPins[camera][0])
             self.pi.write(17, self.camSelectionPins[camera][1])
             self.pi.write(18, self.camSelectionPins[camera][2])

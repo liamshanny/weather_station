@@ -1,4 +1,5 @@
 from queue import SimpleQueue
+import json
 import time
 import datetime
 import subprocess
@@ -11,16 +12,17 @@ def logData(queue, sensors):
     data = {}
     data["timeStamp"] = int(datetime.datetime.now().timestamp()) #seconds since the epoch rounded down
     data["lpsTemp"] = sensors.lpsTemperature
-    time.sleep(.1)
     data["lpsPressure"] = sensors.lpsPressure
-    time.sleep(.1)
     siHum, siTemp = sensors.siData
     data["siTemp"] = siTemp
     data["relativeHumidity"] = siHum
-    data["lightData"] = {"r":255, "g":255, "b":255, "intensity":255}
+    output = sensors.rgbSensor.rgbVal
+    data["lightData"] = {"r":output[0], "g":output[1], "b":output[2], "intensity":sensors.lightIntensity}
     data["rainFall"] = .1
     data["windData"] = {"speed":2.2, "direction":"nw"}
     data["lastIp"] = getIp()
+    with open("log.txt", "a") as f:
+        f.write(json.dumps(data))
     command = {"command":"sendStandardData", "data":data}
     #print(data)
     command = umsgpack.packb(command)
