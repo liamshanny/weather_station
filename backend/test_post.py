@@ -9,6 +9,7 @@ from si7021 import Si7021 as si
 import requests
 import umsgpack
 
+
 i2c = busio.I2C(board.SCL, board.SDA)
 lps35hw = adafruit_lps35hw.LPS35HW(i2c)
 #si7021 = adafruit_si7021.SI7021(i2c)
@@ -18,19 +19,13 @@ siTempBuf = []
 pressureBuf = []
 humBuf = []
 
-testWeatherData = {
-    "startTime": 1595382642,
-    "sampleInterval": 60,
-    "lpsTemp": [40.3213, 23.54],
-    "siTemp": [40.3213, 54.43],
-    "relativeHumidity": [60.60, 30.00],
-    "pressure": [123.321, 232.0932],
-    "lightData": [{"r": 5451.5, "g": 5456.516, "b": 15.1, "intensity": 5}, {"r": 5451.5, "g": 5456.516, "b": 15.1,
-                                                                            "intensity": 5}],
-    "rainFall": [34234.3423, 4382.232],
-    "windData": [{"speed": 54156.5416, "direction": "north"}, {"speed": 54156.5416, "direction": "north"}],
-    "lastIp": "10.1.10.54"
-    }
+testWeatherData = {'command': 'test','data': {'timeStamp': 1595817930, 'lpsTemp': 524.28, 'lpsPressure': -0.043701171875,
+                               'siTemp': 23.38866455078125,
+                               'relativeHumidity': 49.461883544921875,
+                               'lightData': {'r': 255, 'g': 255, 'b': 255, 'intensity': 255},
+                               'rainFall': 0.1, 'windData': {'speed': 2.2, 'direction': 'nw'},
+                               'lastIp': '169.254.255.255'}}
+
 
 def logMeasurement():
     lpsTempBuf.append(lps35hw.temperature)
@@ -52,6 +47,6 @@ testWeatherData["relativeHumidity"] =  humBuf
 data = umsgpack.packb(testWeatherData)
 headers = {"content-type": "application/x-msgpack"}
 cert = ('certs/user.crt', 'certs/user_unencrypted.key')
-r = requests.post('https://108.7.77.7/api/v1/full-send', data=data, headers=headers, cert=cert, verify=False)
+r = requests.post('https://weather.shanny.tools/api/v1/full-send', data=data, headers=headers, cert=cert, verify=True)
 print(r.reason)
 

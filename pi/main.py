@@ -14,7 +14,8 @@ urllib3.disable_warnings()
 def main():
     #check for 4g connection
     #init code
-    sensors = sensorPackage(27, ['a','c'])    dataQueue = SimpleQueue()
+    sensors = sensorPackage(27, ['a','c'])
+    dataQueue = SimpleQueue()
     logQueue = SimpleQueue()
     headers = {"content-type": "application/x-msgpack"}
     cert = ('../backend/certs/user.crt', '../backend/certs/user_unencrypted.key')
