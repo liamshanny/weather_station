@@ -49,6 +49,7 @@ def main():
                 data = dataQueue.get(timeout=.5)
                 r = sendData(data)
                 if not(r.ok):
+                    print("error talking to server")
                     logQueue.put(data) #request failed, store it for later
             except Exception as e:
                 print(e)
