@@ -128,7 +128,7 @@ class ISL29125:
         try:
             val = self.bus.read_i2c_block_data(ISL29125.ISL_I2C_ADDR, ISL29125.THRESHOLD_HL,2)
             return (val[1]<<8|val[0])
-        except:
+        except IOError:
             print("error with i2c")
             return -1
     #value is a list with 2 bytes 
@@ -137,7 +137,7 @@ class ISL29125:
         try:
             self.bus.write_i2c_block_data(ISL29125.ISL_I2C_ADDR, ISL29125.THRESHOLD_HL, value)
             return 0
-        except:
+        except IOError:
             print("error with i2c")
             return -1
     
@@ -146,7 +146,7 @@ class ISL29125:
         try:
             val = self.bus.read_i2c_block_data(ISL29125.ISL_I2C_ADDR, ISL29125.THRESHOLD_LL,2)
             return (val[1]<<8|val[0])
-        except:
+        except IOError:
             print("error with i2c")
             return -1
     #value is a list with 2 bytes 
@@ -155,7 +155,7 @@ class ISL29125:
         try:
             self.bus.write_i2c_block_data(ISL29125.ISL_I2C_ADDR, ISL29125.THRESHOLD_LL, value)
             return 0
-        except:
+        except IOError:
             print("error with i2c")
             return -1
 
@@ -167,13 +167,14 @@ class ISL29125:
             g = out[1]<<8|out[0] 
             b = out[5]<<8|out[4]
             return [r,g,b]
-        except:
-            return -1
+        except IOError:
+            print("error with rgb sensor i2c read")
+            return [-1,-1,-1]
 
     @property
     def isl29125_status(self):
         try:
             out = self.bus.read_byte_data(ISL29125.ISL_I2C_ADDR, ISL29125.STATUS)
             return out
-        except:
+        except IOError:
             return -1

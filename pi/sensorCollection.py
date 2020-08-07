@@ -62,14 +62,14 @@ class sensorPackage:
     @property
     def lightIntensity(self):
         try:
-            output = self.adc.read_adc(0)
+            output = self.adc.read_adc(0) #FSR=+/-.4.096mV
             print(output)
             voltage = output * .002 #LSB=2mV with gain=1
             #print(voltage)
             current = voltage/10000 #sensor breakout board uses 10k resistor
             lux = (current/(1/10**5))/20 #data sheet says 10uA/20lux, so use that as cal value and divide by 20 for accuraccy
             #print(lux)
-            return lux
+            return output
         except:
             print("error reading adc")
             return -1
